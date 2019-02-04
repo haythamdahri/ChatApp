@@ -1,0 +1,153 @@
+{% load staticfiles %}
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'MSG/css/bootstrap.min.css' %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static 'MSG/css/all.min.css' %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static 'MSG/css/custom.css' %}" type="text/css"/>
+
+    <link rel="icon" href="{% static 'MSG/images/website-icon.png' %}"/>
+
+    <title>{% block title %}MSG | {% endblock %}</title>
+</head>
+<body>
+
+{% block header %}
+    {% include 'MSG/includes/navbar.inc.html' %}
+{% endblock %}
+<div class="container-fluid" id="website_container">
+    <div class="row">
+        {% block content %}
+            {% include 'MSG/includes/Friends_list.inc.html' %}
+        {% endblock %}
+        {% block footer %}{% endblock %}
+    </div>
+</div>
+
+{% block js %}
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="{% static 'MSG/js/jquery.min.js' %}"></script>
+    <script src="{% static 'MSG/js/bootstrap.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+    <script src="{% static 'MSG/js/all.min.js' %}"></script>
+    <script src="{% static 'MSG/js/sweetalert.all.min.js' %}"></script>
+    <script src="{% static 'MSG/js/reconnecting-websocket.min.js' %}"></script>
+    <script src="{% static 'MSG/js/jquery.textarea_autosize.min.js' %}"></script>
+    <script src="{% static 'MSG/js/jquery.plugin.escapehtml.js' %}"></script>
+    <script src="{% static 'MSG/js/waypoint.js' %}"></script>
+    <script src="{% static 'MSG/js/infinite.js' %}"></script>
+    <script src="{% static 'MSG/js/custom.js' %}"></script>
+
+    <script type="text/javascript">
+
+        var infinite = new Waypoint.Infinite({
+            element: $("body").children(".live-chat").children(".chat").find('.infinite-container')[0]
+        });
+        var audio = new Audio('{% static "MSG/audios/notification.mp3" %}');
+
+
+        $(window).bind('beforeunload', function () {
+            $.ajax({
+                type: 'GET',
+                async: false,
+                url: '{% url "MSG:disconnect" %}'
+            });
+        });
+
+
+        $('textarea.chatbox__message').textareaAutoSize();
+
+
+        var chatSocket = new ReconnectingWebSocket(
+            'ws://' + window.location.host +
+            '/ws/MSG/connect/');
+
+
+        chatSocket.onopen = function (e) {
+            console.log('%c Connected!', 'font-weight: bold; font-size: 50px; color: red; text-shadow: 1px 1px 0px black, 1px -1px 0px black, -1px 1px 0px black, -1px -1px 0px black;');
+        };
+
+
+        chatSocket.onmessage = function (e) {
+            var data = JSON.parse(e.data);
+            var type = data['message_type'];
+            if (type == "connection_notification") {
+                var sender_id = data['sender_id'];
+                $("#online_offline_status" + sender_id).html(data['html_status']);
+            }
+            if (type == "disconnect_notification") {
+                var sender_id = data['sender_id'];
+                console.log("Disconnected: " + sender_id);
+                console.log(data['html_status']);
+                $("#online_offline_status" + sender_id).html(data['html_status']);
+            }
+            if (type == "new_message") {
+                var html_conversation = data['html_conversation'];
+                var sender_id = data['sender_id'];
+                var receiver_id = data['receiver_id'];
+                if (sender_id != {{ user.id }}) {
+                    audio.play();
+                    var chatwindow = $("body").find("#chatwindow" + sender_id);
+                    if( $(chatwindow).length == 0 ){
+                        $("#sidebar-user-box[data-id='" + sender_id + "']").trigger('click');
+                    }
+                        if (!$("body").find("#msg_input" + sender_id).is(':focus')) {
+                            var count = $(chatwindow).children(".clearfix").children("#unread_messages" + sender_id).text();
+                            if(count != ""){
+                                count = parseInt(count)+1;
+                            }else{
+                                count = 1;
+                            }
+                            console.log(count);
+                            $(chatwindow).children(".clearfix").children("#unread_messages" + sender_id).text(count);
+                            $(chatwindow).children(".clearfix").children("#unread_messages" + sender_id).css({'display': 'block'});
+                        }
+                        var msgs_body = $("body").find("#chatwindow" + sender_id).children(".chat").find('.chat-history');
+                        msgs_body.append(html_conversation);
+                        $(msgs_body).scrollTop($(msgs_body)[0].scrollHeight);
+                } else {
+                    var msgs_body = $("#chatwindow" + receiver_id).children(".chat").find('.chat-history');
+                    msgs_body.append(html_conversation);
+                    $(msgs_body).scrollTop($(msgs_body)[0].scrollHeight);
+                }
+                console.log(html_conversation);
+            }
+        };
+
+
+        chatSocket.onclose = function (e) {
+            console.log("Chat closed");
+        };
+
+        function sendMessage(e, input, receiver_id, sender_id) {
+            if (e.keyCode == 13 && $(input).val() != "") {
+                e.preventDefault();
+                var message = $(input).val();
+                var room = parseInt(receiver_id) + parseInt(sender_id);
+                console.log(room);
+                chatSocket.send(JSON.stringify({
+                    'message': message,
+                    'sender_id': sender_id,
+                    'receiver_id': receiver_id,
+                    'room': room
+                }));
+                $(input).val('');
+            }
+        }
+
+
+    </script>
+
+
+{% endblock %}
+
+</body>
+</html>

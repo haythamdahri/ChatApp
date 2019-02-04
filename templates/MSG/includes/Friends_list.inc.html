@@ -1,0 +1,23 @@
+{% load staticfiles %}
+{% load humanize %}
+
+
+<div id="chat-sidebar">
+    {% for p in profiles %}
+        <div id="sidebar-user-box" data-id="{{ p.user.id }}" url_receiver="{% url 'MSG:messages' user_id=p.user.id %}"
+             csrf="{{ csrf_token }}" url_unread_messages="{% url 'MSG:unread_messages' user_id=p.user.id %}">
+            <img src="{{ p.image.url }}"/>
+            <span id="slider-username">{{ p.full_name }}</span>
+            <div id="online_offline_status{{ p.user.id }}">
+                {% if p.isOnline %}
+                    <span class="online_status"
+                          style="float: right;background: rgb(66, 183, 42); border-radius: 50%; margin-top: 10px; display: inline-block; height: 6px; width: 6px;"></span>
+                {% else %}
+                    <span class="online_status" >
+                    {{ p.last_online_status }}
+                </span>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</div>

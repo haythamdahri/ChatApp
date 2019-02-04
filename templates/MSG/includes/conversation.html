@@ -1,0 +1,13 @@
+{% load staticfiles %}
+
+{% if msg.sender.id != user.profile.id %}
+    <div class="chatbox__body__message chatbox__body__message--left">
+        <img src="{{ msg.sender.image.url }}" alt="Picture">
+        <p>{{ msg.message }}</p>
+    </div>
+{% else %}
+    <div class="chatbox__body__message chatbox__body__message--right">
+        <img src="{{ msg.sender.image.url }}" alt="Picture">
+        <p>{{ msg.message }}</p>
+    </div>
+{% endif %}

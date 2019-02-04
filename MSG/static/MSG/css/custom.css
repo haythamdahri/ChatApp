@@ -1,0 +1,259 @@
+@import url(https://fonts.googleapis.com/earlyaccess/amiri.css);
+@import url(https://fonts.googleapis.com/earlyaccess/droidarabickufi.css);
+@import url(https://fonts.googleapis.com/earlyaccess/droidarabicnaskh.css);
+@import url(https://fonts.googleapis.com/earlyaccess/lateef.css);
+@import url(https://fonts.googleapis.com/earlyaccess/scheherazade.css);
+@import url(https://fonts.googleapis.com/earlyaccess/thabit.css);
+
+
+@font-face {
+	font-family: 'helvetica-thin';
+	src: url('/static/MSG/fonts/HelveticaNeue-Thin.otf');
+}
+
+@font-face {
+	font-family: 'helvetica';
+	src: url('/static/MSG/fonts/HelveticaNeueMedium.ttf');
+}
+
+@font-face {
+	font-family: 'helvetica-heavy';
+	src: url('/static/MSG/fonts/HelveticaNeue-Heavy.otf');
+}
+
+
+#chat-sidebar {
+    width: 215px;
+    position: fixed;
+    height: 100%;
+    right: 0px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-left: 1px solid #ccc;
+    box-shadow: 1px 0 0 #f0f0f2 inset;
+    font-family: 'Droid Arabic Kufi', -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"
+
+}
+
+#sidebar-user-box {
+    padding: 4px;
+    margin-bottom: 4px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+#sidebar-user-box:hover {
+    background-color: #999999;
+}
+
+#sidebar-user-box:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+#sidebar-user-box img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    float: left;
+}
+
+#slider-username {
+    float: left;
+    line-height: 30px;
+    margin-left: 5px;
+}
+
+.live-chat p{
+	font-family: 'helvetica';
+	color: #9a9a9a;
+}
+
+.list_online {
+    height: 40px;
+}
+.clearfix { *zoom: 1; } /* For IE 6/7 */
+.clearfix:before, .clearfix:after {
+    content: "";
+    display: table;
+}
+.clearfix:after { clear: both; }
+
+/* ---------- LIVE-CHAT ---------- */
+
+.live-chat {
+	bottom: 0;
+	font-size: 12px;
+	right: 24px;
+	position: fixed;
+	width: 300px;
+    border: 0.5px solid #cccccc;
+}
+
+.live-chat header {
+	background: #293239;
+	border-radius: 5px 5px 0 0;
+	color: #fff;
+	cursor: pointer;
+	padding: 8px 16px;
+}
+
+.live-chat h4:before {
+	background: #1a8a34;
+	border-radius: 50%;
+	content: "";
+	display: inline-block;
+	height: 8px;
+	margin: 0 8px 0 0;
+	width: 8px;
+}
+
+.live-chat h4 {
+	font-size: 12px;
+    font-weight: bold;
+}
+
+.live-chat h5 {
+	font-size: 10px;
+    font-family: 'helvetica-heavy';
+}
+
+.live-chat form {
+	padding: 24px;
+}
+
+.live-chat textarea {
+	border: 1px solid #ccc;
+	padding: 8px;
+    outline: none;
+    width: 100%;
+    resize: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+	font-family: 'helvetica';
+	overflow-y: hidden;
+  	box-sizing: border-box;
+  	max-height: 160px;
+  	min-height: 38px;
+  	overflow-x: hidden;
+}
+
+.chat-message-counter {
+	background: #e62727;
+	border: 1px solid #fff;
+	border-radius: 50%;
+	display: block;
+	font-size: 12px;
+	font-weight: bold;
+	height: 28px;
+	left: 0;
+	line-height: 28px;
+	margin: -15px 0 0 -15px;
+	position: absolute;
+	text-align: center;
+	top: 0;
+	width: 28px;
+}
+
+.chat-close {
+	background: #1b2126;
+	border-radius: 50%;
+	color: #fff;
+	display: block;
+	float: right;
+	font-size: 10px;
+	height: 16px;
+	line-height: 16px;
+	margin: 2px 0 0 0;
+	text-align: center;
+	width: 16px;
+}
+
+.chat {
+	background: #fff;
+}
+
+.chat-history {
+	height: 252px;
+	padding: 8px 24px;
+	overflow-y: scroll;
+}
+
+.chat-message {
+	margin: 16px 0;
+}
+
+.chat-message img {
+	border-radius: 50%;
+	float: left;
+}
+
+.chat-message-content {
+	margin-left: 56px;
+}
+
+.chat-time {
+	float: right;
+	font-size: 10px;
+	font-family: 'helvetica-thin';
+	font-weight: bold;
+}
+
+.chat-feedback {
+	font-style: italic;
+	margin: 0 0 0 80px;
+}
+
+.online_status{
+	float: right;
+    margin-top: 7px;
+    font-size: 10px;
+}
+
+@media only screen and (max-width: 520px) {
+    #chat-sidebar
+	{
+		width: 26%;
+		position: fixed;
+		height: 100%;
+		right: 0px;
+		padding-top: 10px;
+		padding-bottom: 10px;
+		border-left: 1px solid #ccc;
+		box-shadow: 1px 0 0 #f0f0f2 inset;
+		font-family: 'Droid Arabic Kufi', -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+	}
+	#sidebar-user-box {
+		font-size: 6px;
+		cursor: pointer;
+	}
+	#sidebar-user-box img {
+		width: 18px;
+		margin-top: 6px;
+		height: 18px;
+		border-radius: 50%;
+		float: left;
+		margin-left: 3px;
+	}
+	#slider-username {
+		float: left;
+		line-height: 30px;
+		margin-left: 3px;
+	}
+	.online_status{
+		float: right;
+		margin-top: 11px;
+		font-size: 6px;
+	}
+}
+
+
+
+
+
+
+

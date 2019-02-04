@@ -1,0 +1,64 @@
+{% load staticfiles %}
+
+<div id="chatwindow{{ p.user.id }}" class="live-chat">
+
+    <header class="clearfix">
+
+        <a href="#" class="chat-close">x</a>
+
+        <h4>{{ p.full_name }}</h4>
+
+        <span class="chat-message-counter" id="unread_messages{{ p.user.id }}" style="display: none;"></span>
+
+    </header>
+
+    <div class="chat">
+
+        <div class="chat-history infinite-container">
+            {% for msg in messages %}
+                <div class="chat-message clearfix">
+                    <img src="{{ msg.sender.image.url }}" alt="" width="32" height="32">
+                    <div class="chat-message-content clearfix">
+                        <span class="chat-time">{{ msg.sent_date | date:"M,d H:i" }}</span>
+                        <h5>{{ msg.sender.full_name|safe }}</h5>
+                        <p>{{ msg.message }}</p>
+                    </div> <!-- end chat-message-content -->
+                </div> <!-- end chat-message -->
+                <hr>
+            {% endfor %}
+
+            <script>
+                var msgs_body = $("#chatwindow{{ p.user.id }}").children(".chat").find('.chat-history');
+                $(msgs_body).scrollTop($(msgs_body)[0].scrollHeight);
+            </script>
+
+        </div> <!-- end chat-history -->
+
+
+        <textarea rows="1" class="chatbox__message"
+                  onkeypress="sendMessage(event, this, '{{ p.user.id }}', '{{ user.id }}');"
+                  id="msg_input{{ p.user.id }}" csrf_token="{{ csrf_token }}"
+                  url_receiver="{% url 'MSG:read_messages' user_id=p.user.id %}" data-user_id="{{ p.user.id }}"
+                  placeholder="Write something interesting"></textarea>
+
+    </div> <!-- end chat -->
+<script>
+    $('#chatwindow{{ p.user.id }}').children('.clearfix').on('click', function() {
+
+		$("#chatwindow{{ p.user.id }}").find('.chat').slideToggle(300, 'swing');
+        var msgs_body = $("#chatwindow{{ p.user.id }}").children(".chat").find('.chat-history');
+        $(msgs_body).scrollTop( $(msgs_body)[0].scrollHeight );
+
+	});
+
+	$("#chatwindow{{ p.user.id }}").children(".clearfix").find('.chat-close').on('click', function(e) {
+		e.preventDefault();
+		$('#chatwindow{{ p.user.id }}').remove();
+        remove_chat_window({{ p.user.id }});
+        display_chat_window();
+	});
+</script>
+
+
+
+</div>
